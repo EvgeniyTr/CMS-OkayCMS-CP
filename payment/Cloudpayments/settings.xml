@@ -54,6 +54,26 @@
 			        <name>Português</name>
 			        <value>pt</value>
 		        </options>
+		        <options>
+			        <name>Czech</name>
+			        <value>cs-CZ</value>
+		        </options>
+	        </settings>
+	        <settings>
+		        <variable>skin</variable>
+		        <name>Выбор дизайна виджета</name>
+		        <options>
+			        <name>classic</name>
+			        <value>classic</value>
+		        </options>
+		        <options>
+			        <name>modern</name>
+			        <value>modern</value>
+		        </options>
+		        <options>
+			        <name>mini</name>
+			        <value>mini</value>
+		        </options>
 	        </settings>
 	        <settings>
 		        <variable>taxationSystem</variable>
@@ -84,6 +104,10 @@
 		        </options>
 	        </settings>
 	        <settings>
+		        <variable>calculationPlace</variable>
+		        <name>Место осуществления расчёта</name>
+	        </settings>
+	        <settings>
 		        <variable>vat</variable>
 		        <name>Ставка НДС</name>
 		        <options>
@@ -91,8 +115,8 @@
 			        <value>null</value>
 		        </options>
 		        <options>
-			        <name>НДС 18%</name>
-			        <value>18</value>
+			        <name>НДС 20%</name>
+			        <value>20</value>
 		        </options>
 		        <options>
 			        <name>НДС 10%</name>
@@ -107,8 +131,8 @@
 			        <value>110</value>
 		        </options>
 		        <options>
-			        <name>расчетный НДС 18/118</name>
-			        <value>118</value>
+			        <name>расчетный НДС 20/120</name>
+			        <value>120</value>
 		        </options>
 	        </settings>
 	        <settings>
@@ -119,8 +143,8 @@
 			        <value>null</value>
 		        </options>
 		        <options>
-			        <name>НДС 18%</name>
-			        <value>18</value>
+			        <name>НДС 20%</name>
+			        <value>20</value>
 		        </options>
 		        <options>
 			        <name>НДС 10%</name>
@@ -135,8 +159,8 @@
 			        <value>110</value>
 		        </options>
 		        <options>
-			        <name>расчетный НДС 18/118</name>
-			        <value>118</value>
+			        <name>расчетный НДС 20/120</name>
+			        <value>120</value>
 		        </options>
 	        </settings>
 	        <settings>

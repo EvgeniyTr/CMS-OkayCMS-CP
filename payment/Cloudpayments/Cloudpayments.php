@@ -17,7 +17,7 @@ class Cloudpayments extends Okay
 		if ($payment_currency==1) $currency='USD'; 
 		if ($payment_currency==2) $currency='RUB'; 
 		if ($payment_currency==4) $currency='UAH'; 
-		
+
 		//получаем id плательщика
 		if ($order-> user_id!=0)
 		$accountId = $order-> user_id;
@@ -65,47 +65,49 @@ class Cloudpayments extends Okay
 		if ($language=='pt')
 		    $description = 'O pagamento do pedido №'.$order->id;
 		    
+		if ($language=='cs-CZ')
+		    $description = 'Platební příkaz №'.$order->id;
+		    
 		//формируем чек
         if ($settings['kassa'] == '1')
         {	
-            $purchases = $this->orders->get_purchases();
+            $purchases = $this->orders->get_purchases(array('order_id' => $order->id));
 
             foreach ($purchases as $purchase)
-            {      
-                if ($purchase->order_id == $order_id)
-                    {   $price  = $this->money->convert($purchase->price, $currency_id, false);
-                        $Items[] = array(
-                        'label'           =>trim($purchase->product_name),
-                        'price'           =>number_format($price, 2, '.', ''),
-                        'quantity'        =>number_format($purchase-> amount, 2, '.', ''),
-                        'amount'          =>number_format($purchase->amount*$price, 2, '.', ''),
-                        'vat'             =>intval($settings['vat']),
-                        'method'          =>0,
-    	                'object'          =>0,
-                        'measurementUnit' =>$purchase->units,
-                        );
-                    };
+            {
+                $price  = $this->money->convert($purchase->price, $payment_currency->id, false);
+                $Items[] = array(
+                    'label'           =>trim($purchase->product_name),
+                    'price'           =>number_format($price, 2, '.', ''),
+                    'quantity'        =>number_format($purchase-> amount, 2, '.', ''),
+                    'amount'          =>number_format($purchase->amount*$price, 2, '.', ''),
+                    'vat'             =>intval($settings['vat']),
+                    'method'          =>0,
+                    'object'          =>0,
+                    'measurementUnit' =>$purchase->units,
+                );
             };        
             unset($p);
             $delivery_price = $order->delivery_price;
                 if ($delivery_price>0)
                 {   $delivery_method = $this->delivery->get_delivery($order->delivery_id);
-                    $delivery_price = $this->money->convert($delivery_price, $currency_id, false);
+                    $delivery_price = $this->money->convert($delivery_price, $payment_currency->id, false);
                     $array =array(
-                    'label'           =>trim($delivery_method->name),
-                    'price'           =>number_format($delivery_price, 2, '.', ''),
-                    'quantity'        =>1,
-                    'amount'          =>number_format($delivery_price, 2, '.', ''),
-                    'vat'             =>intval($settings['vatd']),
-                    'method'          =>0,
-    	            'object'          =>0,
-                    'measurementUnit' =>'',
+                        'label'           =>trim($delivery_method->name),
+                        'price'           =>number_format($delivery_price, 2, '.', ''),
+                        'quantity'        =>1,
+                        'amount'          =>number_format($delivery_price, 2, '.', ''),
+                        'vat'             =>intval($settings['vatd']),
+                        'method'          =>0,
+                        'object'          =>0,
+                        'measurementUnit' =>'',
                     );
                     $Items[] = $array;
                 };
             $receipt = array(
                 'Items'         =>$Items,
                 'taxationSystem'=>intval($settings['taxationSystem']),
+                'calculationPlace'=>strval($settings['calculationPlace']),
 	            'email'         =>$order-> email,
 	            'phone'         =>$order-> phone,
 	            'amounts'       =>array (
@@ -134,7 +136,8 @@ class Cloudpayments extends Okay
         $res['order_id']    = $order_id;
         $res['language']    = $language;
         $res['accountId']   = $accountId;
-        $res['email']       = $email;
+        $res['skin']        = $settings['skin'];
+        $res['email']       = $order->email;
         $res['data']        = json_encode($data,JSON_UNESCAPED_UNICODE);
         $res['result_url']  = $result_url;
         $res['server_url']  = $server_url;

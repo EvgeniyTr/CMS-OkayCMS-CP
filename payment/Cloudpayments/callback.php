@@ -19,7 +19,7 @@ $settings         = $okay->payment->get_payment_settings($payment_method->id);
 //API из настроек
 $API=$settings['API'];
 //получаем контрольную подпись
-$hash   = $_POST;
+$hash = $okay->request->post();
 $sign = hash_hmac('sha256', $hash, $API, true);
 $sign = base64_encode($sign);
 $signs = $_SERVER['HTTPS_CONTENT_HMAC'];
@@ -41,7 +41,7 @@ if($OperationType==Payment)
         response(13);
     }
     //проверяем сумму заказа
-    elseif($amount != round($okay->money->convert($order->total_price, $method->currency_id, false), 2) || $amount<=0)
+    elseif($amount != round($okay->money->convert($order->total_price, $payment_method->id, false), 2) || $amount<=0)
     {
         response(11);
     }
